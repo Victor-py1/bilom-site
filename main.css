@@ -1,0 +1,893 @@
+* {
+  box-sizing: border-box;
+}
+:root {
+  font-size: 15px;
+  --bg-color: #232323;
+  --text-color: #a7a7a6;
+  --bg-2: #393939;
+  --primary-color: #f5c277;
+  --heading-color: #ffffff;
+
+  /* screen breakpoints */
+  --screen-sm: 368px;
+  --screen-md: 765px;
+}
+/* General styles */
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+section {
+  display: flex;
+  justify-content: center;
+}
+.container {
+  max-width: 1050px;
+  padding: 0 0.5rem;
+  margin: 0 auto;
+}
+h1,
+h2 {
+  line-height: 1em;
+}
+
+body > .overlay,
+body > .modal {
+  display: none;
+}
+body.showing > .overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background-color: #000000e7;
+  z-index: 90;
+}
+body.showing .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  width: 90%;
+  background-color: var(--bg-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  padding: 2rem 0;
+  box-shadow: 2px 3px 15px var(--bg-color);
+}
+.modal > .heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5rem;
+  margin: 1rem auto;
+}
+.modal h2 {
+  margin: 0;
+  font-weight: 100;
+  text-transform: capitalize;
+  color: var(--heading-color);
+}
+.modal .close {
+  text-transform: capitalize;
+  padding: 0;
+  color: var(--text-color);
+  background-color: transparent;
+  border: none;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.modal > p {
+  margin: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2em;
+  text-align: center;
+  max-width: 90%;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+.modal form .form-group {
+  margin-bottom: 1rem;
+}
+.modal form .form-group label {
+  display: block;
+  margin-bottom: 0.2em;
+}
+.modal form .form-group input {
+  display: block;
+  border: 1px solid var(--heading-color);
+  background-color: transparent;
+  padding: 4px 2px;
+  color: var(--heading-color);
+}
+.modal form .form-group input:focus {
+  outline: none;
+}
+.modal form .form-group select {
+  display: block;
+  border: 1px solid var(--heading-color);
+  background-color: transparent;
+  padding: 4px 2px;
+  color: var(--heading-color);
+}
+.modal form .form-group select {
+  background-color: var(--bg-color);
+}
+.modal .book {
+  padding: 0.4rem 2rem;
+  border: none;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  z-index: 10;
+  transition: all 400ms linear;
+}
+header.is-scrolling {
+  background-color: var(--bg-2);
+  box-shadow: 0 5px 10px var(--bg-color);
+}
+header > .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+header .logo,
+header .menu {
+  z-index: 999;
+}
+
+.text-logo {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.2em;
+  font-weight: 800;
+}
+.text-logo > a {
+  color: var(--heading-color);
+  text-decoration: none;
+}
+
+header .menu {
+  padding: 0.7rem 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+}
+header .menu > span,
+header .menu > span::before,
+header .menu > span::after {
+  display: block;
+  background-color: var(--text-color);
+  width: 2rem;
+  height: 4px;
+  border-radius: 4px;
+  transition: all 400ms linear;
+}
+header .menu > span::before {
+  content: "";
+  transform: translateY(-8px);
+}
+header .menu > span::after {
+  content: "";
+  transform: translateY(4px);
+}
+
+header .menu.close > span {
+  background-color: transparent;
+}
+header .menu.close > span::before {
+  transform: rotateZ(45deg) translateY(2px);
+}
+header .menu.close > span::after {
+  transform: rotateZ(-45deg) translate(1px, -2px);
+}
+
+header nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #313030e2;
+  padding-top: 10%;
+  z-index: 20;
+  transition: all 500ms linear;
+  transform: translateY(-100%);
+}
+header nav.visible {
+  transform: translateY(0);
+}
+
+header nav li {
+  list-style: none;
+  margin: 0.5rem auto;
+}
+
+header nav > li > .nav-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.2em;
+  text-transform: capitalize;
+  text-align: center;
+}
+header nav > li > .reservation {
+  background-color: transparent;
+  border: none;
+}
+
+.opening {
+  padding: 0;
+  background-image: url(./images/nice-view-inside-restaurant.jpg);
+  background-position: center;
+  background-size: cover;
+  min-height: 50vh;
+  width: 100%;
+  position: relative;
+}
+.opening > .overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #00000096;
+}
+.opening > .container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  justify-content: center;
+  z-index: 3;
+}
+
+.opening > .container > h1 {
+  text-align: center;
+  color: var(--heading-color);
+  text-transform: capitalize;
+  font-weight: 800;
+  margin-bottom: 0.6em;
+}
+.opening > .container > p {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 0.85em;
+}
+.book {
+  text-align: center;
+  color: var(--bg-color);
+  background-color: var(--primary-color);
+  padding: 0.6rem 3rem;
+  border-radius: 5px;
+  text-decoration: none;
+  text-transform: capitalize;
+  font-weight: 900;
+  margin-top: 2rem;
+  border: none;
+  cursor: pointer;
+}
+
+.story > .container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.story > .container .image-display {
+  display: flex;
+  gap: 0.5em;
+}
+
+.story > .container .image-display .col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.image-display .col img {
+  height: 175px;
+  width: 150px;
+}
+
+.story > .container .story-text {
+  margin-bottom: 2rem;
+}
+.story > .container .story-text h2 {
+  color: var(--primary-color);
+  font-weight: 100;
+  font-size: 2.4em;
+  text-transform: capitalize;
+  margin: 1rem 0.5rem;
+}
+.story > .container .story-text p {
+  color: var(--text-color);
+  font-size: 1em;
+  margin: 1rem 0.5rem;
+}
+.story > .container .story-text a {
+  color: var(--heading-color);
+  font-size: 1em;
+  font-weight: 800;
+  text-transform: capitalize;
+  text-decoration: none;
+  margin: 1rem 0.5rem;
+}
+
+.special {
+  margin-bottom: 1rem;
+}
+.special > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.special > .container h2 {
+  color: var(--primary-color);
+  font-weight: 100;
+  font-size: 2em;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+.special > .container p {
+  color: var(--text-color);
+  font-size: 0.8em;
+  text-transform: capitalize;
+  text-align: center;
+}
+.special > .container .meal-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto;
+  gap: 1.4rem;
+}
+.special > .container .meal-display .special-card {
+  width: 200px;
+  height: 300px;
+  background-color: var(--bg-2);
+  overflow: hidden;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.special > .container .meal-display .special-card .img-wrapper {
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  bottom: 50%;
+}
+.special > .container .meal-display .special-card img {
+  width: 100%;
+}
+.special > .container .meal-display .special-card .meal-details {
+  margin-top: 150px;
+  padding: 1rem 1rem;
+}
+.special > .container .meal-display .special-card .meal-details > h4 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.9em;
+  color: var(--heading-color);
+}
+.special > .container .meal-display .special-card .meal-details > small {
+  margin-bottom: 0.5rem;
+  font-size: 0.9em;
+  color: var(--text-color);
+}
+.special > .container .meal-display .special-card .meal-details > div {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.special > .container .meal-display .special-card .meal-details > div .rating {
+  font-size: 0.9em;
+}
+.special > .container .meal-display .special-card .meal-details > div a {
+  font-size: 1em;
+  color: var(--primary-color);
+  text-decoration: none;
+  text-transform: capitalize;
+  font-weight: 800;
+  padding: 0.1em 0.3em;
+  border-bottom: 1px solid currentColor;
+}
+
+.mission > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.mission > .container .image-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.mission > .container .image-display > img {
+  width: 100%;
+}
+.mission > .container .mission-text {
+  margin-bottom: 2rem;
+}
+.mission > .container .mission-text h2 {
+  color: var(--heading-color);
+  font-weight: 100;
+  font-size: 2em;
+  margin: 1rem 0.5rem;
+}
+.mission > .container .mission-text p {
+  color: var(--text-color);
+  font-size: 1em;
+  margin: 1rem 0.5rem 2rem 0.5rem;
+}
+.mission > .container .mission-text .book {
+  margin: 1rem 0.5rem;
+}
+
+.testimonial {
+  padding: 0;
+  background-image: url(./images/stake-meals.jpg);
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  position: relative;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+}
+.testimonial > .overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000000c1;
+}
+.testimonial > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+.testimonial > .container h2 {
+  text-align: center;
+  color: var(--heading-color);
+  font-weight: 100;
+  font-size: 2em;
+  z-index: 3;
+}
+.testimonial > .container .testimony {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  z-index: 3;
+}
+.testimonial > .container .testimony .img-wrapper {
+  overflow: hidden;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  z-index: 3;
+}
+.testimonial > .container .testimony .img-wrapper img {
+  width: 100%;
+}
+.testimonial > .container .testimony .text {
+  color: var(--text-color);
+  text-align: center;
+  font-size: 1.2em;
+  line-height: 1.8;
+  z-index: 3;
+  padding: 0 1em;
+}
+
+.chefs {
+  margin: 1rem auto;
+}
+.chefs > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chefs > .container h2 {
+  color: var(--primary-color);
+  font-weight: 100;
+  font-size: 2em;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+.chefs > .container p {
+  color: var(--text-color);
+  font-size: 0.8em;
+  text-transform: capitalize;
+  text-align: center;
+}
+.chefs > .container .chefs-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto;
+  gap: 1.4rem;
+}
+.chefs > .container .chefs-display .chef-card {
+  width: 200px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.chefs > .container .chefs-display .chef-card .img-wrapper {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+.chefs > .container .chefs-display .chef-card img {
+  width: 100%;
+  height: 100%;
+}
+.chefs > .container .chefs-display .chef-card .chef-description {
+  padding: 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chefs > .container .chefs-display .chef-card .chef-description > h4 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1em;
+  color: var(--heading-color);
+}
+.chefs > .container .chefs-display .chef-card .chef-description > small {
+  margin-bottom: 0.5rem;
+  font-size: 0.9em;
+  color: var(--text-color);
+  text-transform: capitalize;
+}
+.chefs > .container .chefs-display .chef-card .chef-description > div {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gallery {
+  margin: 1rem auto;
+}
+.gallery > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery > .container h2 {
+  color: var(--heading-color);
+  font-weight: 100;
+  font-size: 2em;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+.gallery > .container p {
+  color: var(--text-color);
+  font-size: 0.8em;
+  text-transform: capitalize;
+  text-align: center;
+  max-width: 300px;
+}
+.gallery > .container .gallery-display {
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: repeat(100px, 2);
+  grid-template-rows: repeat(100px, 2);
+  gap: 1em;
+  grid-template-areas:
+    "img1 img2"
+    "img3 img4";
+  overflow: hidden;
+}
+
+.gallery > .container .gallery-display img {
+  width: 100%;
+  height: 100%;
+}
+.gallery > .container .gallery-display img:nth-child(1) {
+  grid-area: img1;
+}
+.gallery > .container .gallery-display img:nth-child(2) {
+  grid-area: img2;
+}
+.gallery > .container .gallery-display img:nth-child(3) {
+  grid-area: img3;
+}
+.gallery > .container .gallery-display img:nth-child(4) {
+  grid-area: img4;
+}
+
+footer {
+  background-color: #0000005e;
+  display: flex;
+  justify-content: center;
+}
+footer .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+footer h1 {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  color: var(--heading-color);
+  margin-bottom: 0;
+  font-weight: 900;
+}
+footer a {
+  color: var(--text-color);
+  text-decoration: none;
+  text-transform: capitalize;
+}
+footer .container div {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+}
+footer .container div:last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+footer .container div label {
+  display: flex;
+  border: 1px solid var(--text-color);
+}
+footer .container div input {
+  color: var(--heading-color);
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  padding: 6px 8px;
+}
+footer .container div input:focus {
+  outline: none;
+}
+footer .container div button {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  padding: 6px 8px;
+  font-weight: 600;
+}
+/* medium breakpoint */
+@media screen and (min-width: 765px) {
+  .modal {
+    width: 60%;
+  }
+
+  .modal .book {
+    cursor: pointer;
+  }
+
+  .container {
+    padding: 0 2rem;
+  }
+
+  header {
+    height: 70px;
+    padding: 1rem 0;
+  }
+
+  header .menu {
+    display: none;
+  }
+
+  header nav {
+    position: static;
+    transform: translateY(0);
+    flex-direction: row;
+    background-color: transparent;
+    padding: 0;
+  }
+  header nav li {
+    margin: auto 20px;
+  }
+  header nav > li > .nav-link {
+    padding: 0.2em 0.3em;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 400ms linear;
+  }
+  header nav > li > .nav-link:is(:hover, :focus) {
+    border-bottom: 1px solid var(--primary-color);
+    color: var(--primary-color);
+  }
+  #reservation {
+    padding: 0.2em 0.3em;
+  }
+  #reservation:is(:hover, :focus) {
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .opening {
+    min-height: 70vh;
+  }
+  .opening > .container > h1 {
+    margin-bottom: 1em;
+  }
+  .opening > .container > p {
+    max-width: 765px;
+  }
+  .book {
+    padding: 0.6rem 2.5rem;
+    margin-top: 4rem;
+  }
+  .book:is(:hover, :focus) {
+    opacity: 0.95;
+  }
+
+  .story > .container {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    gap: 3rem;
+  }
+  .story > .container .image-display {
+    display: flex;
+    gap: 1em;
+  }
+
+  .story > .container .image-display .col {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  .story > .container .image-display .col:nth-child(2) {
+    transform: translateY(-10%);
+  }
+  .image-display .col img {
+    height: 200px;
+    width: 175px;
+  }
+  .story > .container .story-text h2 {
+    font-size: 2.7em;
+    margin: 2rem 0.5rem;
+  }
+  .story > .container .story-text p {
+    font-size: 0.9em;
+    line-height: 1.8;
+    margin: 2rem 0.5rem;
+    max-width: 400px;
+  }
+  .story > .container .story-text a {
+    font-size: 0.9em;
+  }
+  .story > .container .story-text a:is(:hover, :focus) {
+    border-bottom: 1px solid currentColor;
+  }
+
+  .special {
+    margin-bottom: 3rem;
+  }
+  .special > .container p {
+    max-width: 350px;
+  }
+  .special > .container .meal-display {
+    flex-direction: row;
+  }
+  .special > .container .meal-display .special-card .meal-details > div a {
+    transition: all 400ms linear;
+    border-bottom: none;
+  }
+  .special
+    > .container
+    .meal-display
+    .special-card
+    .meal-details
+    > div
+    a:is(:hover, :focus) {
+    border-bottom: 1px solid currentColor;
+  }
+
+  .mission > .container {
+    flex-direction: row-reverse;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    gap: 3rem;
+  }
+  .mission > .container .mission-text {
+    width: 50%;
+  }
+  .mission > .container .mission-text p {
+    color: var(--text-color);
+    font-size: 1em;
+    margin: 2rem 0.5rem;
+  }
+  .testimonial > .container .testimony {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    z-index: 3;
+  }
+  .testimonial > .container .testimony .img-wrapper {
+    overflow: hidden;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    z-index: 3;
+  }
+  .testimonial > .container .testimony .img-wrapper img {
+    width: 100%;
+  }
+  .testimonial > .container .testimony .text {
+    text-align: start;
+    width: 50%;
+    color: var(--text-color);
+    font-size: 1.4em;
+    line-height: 1.8;
+    z-index: 3;
+  }
+
+  .chefs > .container .chefs-display {
+    flex-direction: row;
+    gap: 1.4rem;
+  }
+
+  .gallery > .container .gallery-display {
+    padding: 2rem 1rem;
+    display: grid;
+    gap: 1.4rem;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 200px 200px;
+    grid-template-areas:
+      "img1 img2 img3"
+      "img1 img4 img3";
+    overflow: hidden;
+  }
+
+  footer .container {
+    flex-direction: row;
+    align-items: center;
+    gap: 4rem;
+    padding: 2rem;
+  }
+  footer a:is(:hover, :focus) {
+    color: var(--primary-color);
+  }
+
+  footer .container div {
+    gap: 2rem;
+    flex-direction: column;
+  }
+  footer .container div:last-child {
+    align-items: start;
+    gap: 0.9em;
+  }
+}
